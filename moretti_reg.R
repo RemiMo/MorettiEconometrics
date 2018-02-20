@@ -210,11 +210,19 @@ stargazer(regDecline, type='text', omit.stat=c("f", "ser"), title="Convexity of 
 coeff <- coefficients(regDecline)
 varcov_matrix <- vcov(regDecline)
 # Compute the variance of 2(t^2 + t^2:positive_surprise).
-variance <- 4 * ( varcov_matrix[2, 2] + varcov_matrix[4, 4] + 2*varcov_matrix[3, 4] )
+variance <- 4 * ( varcov_matrix[2, 2] + varcov_matrix[4, 4] + 2*varcov_matrix[2, 4] )
 # Compute the value of the statistics.
-statistics <- 2 * (coeff[2] + coeff[4]) / variance
+statistics <- 2 * (coeff[2] + coeff[4]) / variance^(1/2)
+# Compute the p-value (the statistics follows a standard normal distribution). 
+pvalue_pos <- pnorm(statistics)
 
-#TODO: one-tailed test
+# Test the hypothesis 2 t^2 > 0 (decline of negative surprise movies should be convex).
+# Compute the variance of 2 t^2.
+variance <- varcov_matrix[2, 2]
+# Compute the value of the statistics.
+statistics <- coeff[2] / variance^(1/2)
+# Compute the p-value (the statistics follows a standard normal distribution). 
+pvalue_neg <- pnorm(-statistics)
 
 ###########
 #  Graph  #
