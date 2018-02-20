@@ -155,8 +155,8 @@ regSaleDynamics3 <- felm(log_sales ~ t + t : positive_surprise | id, data = df)
 regSaleDynamics4 <- felm(log_sales ~ 0 + I(t*bottom_surprise) + I(t*middle_surprise) + I(t*top_surprise) | id, data = df)
 
 # Print a table with the results of the regressions.
-stargazer(regSaleDynamics1, regSaleDynamics2, regSaleDynamics3, regSaleDynamics4, type='text', omit.stat=c("f", "ser"), title='Decline in box-office sales by opening week surprise')
-
+test <-stargazer(regSaleDynamics1, regSaleDynamics2, regSaleDynamics3, regSaleDynamics4, omit.stat=c("f", "ser"), title='Decline in box-office sales by opening week surprise',out = "coucou.tex");
+print(test, file = "filename2.tex")
 ##########################################
 #  Prediction 2: Precision of the Prior  #
 ##########################################
@@ -248,3 +248,6 @@ lines(t, average_neg
       , type='b'
       , col='blue')
 legend(5.5, 14, legend=c('Positive', 'Negative'), col=c('red', 'blue'), lty=1, cex=0.8)
+
+dev.copy(jpeg,filename="plot.png");
+dev.off ();
