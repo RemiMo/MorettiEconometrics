@@ -1,6 +1,6 @@
 library(lfe)
 library(stargazer)
-
+##coucou
 df <- read.csv('moretti_data.csv')
 
 ###################
