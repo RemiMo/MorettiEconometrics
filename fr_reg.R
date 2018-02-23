@@ -1,220 +1,201 @@
 library(lfe)
 library(stargazer)
 
-df <- read.csv('donnees_fr.csv')
+fr_df <- read.csv('donnees_fr.csv')
 
 ###################
 #  Data Cleaning  #
 ###################
 
-# remove movies with length of 0
-df <- df[df$Duree != 0, ]
+# In this part, we change the dataset to make it closer to the dataset of Moretti.
 
-# remove movies wihout any sale or screen
-#df <- df[df$entree_paris1 > 0 | df$entree_fr1 > 0, ]
-#df <- df[df$seance_paris1 > 0 | df$seance_fr1 > 0, ]
-df[is.na(df$entree_fr1), 'entree_fr1'] <- 0
-df[is.na(df$seance_fr1), 'seance_fr1'] <- 0
-df <- df[df$entree_fr1 > 0, ]
-df <- df[df$seance_fr1 > 0, ]
+# Remove the movies without any screen in Paris during the first week (4 movies).
+fr_df <- fr_df[fr_df$seance_paris1 != 0,]
+# Remove the movies without any id_distributeur (12 movies).
+fr_df <- fr_df[!is.na(fr_df$id_distributeur),]
 
-# generate logarithm of sales and screens
-df$log_entree_paris1 <- log(df$entree_paris1 + 1)
-df$log_entree_paris2 <- log(df$entree_paris2 + 1)
-df$log_entree_paris3 <- log(df$entree_paris3 + 1)
-df$log_entree_paris4 <- log(df$entree_paris4 + 1)
-df$log_entree_paris5 <- log(df$entree_paris5 + 1)
-df$log_entree_paris6 <- log(df$entree_paris6 + 1)
-df$log_entree_paris7 <- log(df$entree_paris7 + 1)
-df$log_entree_paris8 <- log(df$entree_paris8 + 1)
-df$log_entree_paris9 <- log(df$entree_paris9 + 1)
-df$log_entree_paris10 <- log(df$entree_paris10 + 1)
-df$log_entree_paris11 <- log(df$entree_paris11 + 1)
-df$log_entree_paris12 <- log(df$entree_paris12 + 1)
-df$log_entree_paris13 <- log(df$entree_paris13 + 1)
-df$log_seance_paris1 <- log(df$seance_paris1 + 1)
-df$log_seance_paris2 <- log(df$seance_paris2 + 1)
-df$log_seance_paris3 <- log(df$seance_paris3 + 1)
-df$log_seance_paris4 <- log(df$seance_paris4 + 1)
-df$log_seance_paris5 <- log(df$seance_paris5 + 1)
-df$log_seance_paris6 <- log(df$seance_paris6 + 1)
-df$log_seance_paris7 <- log(df$seance_paris7 + 1)
-df$log_seance_paris8 <- log(df$seance_paris8 + 1)
-df$log_seance_paris9 <- log(df$seance_paris9 + 1)
-df$log_seance_paris10 <- log(df$seance_paris10 + 1)
-df$log_seance_paris11 <- log(df$seance_paris11 + 1)
-df$log_seance_paris12 <- log(df$seance_paris12 + 1)
-df$log_seance_paris13 <- log(df$seance_paris13 + 1)
-df$log_entree_fr1 <- log(df$entree_fr1 + 1)
-df$log_entree_fr2 <- log(df$entree_fr2 + 1)
-df$log_entree_fr3 <- log(df$entree_fr3 + 1)
-df$log_entree_fr4 <- log(df$entree_fr4 + 1)
-df$log_entree_fr5 <- log(df$entree_fr5 + 1)
-df$log_entree_fr6 <- log(df$entree_fr6 + 1)
-df$log_entree_fr7 <- log(df$entree_fr7 + 1)
-df$log_entree_fr8 <- log(df$entree_fr8 + 1)
-df$log_entree_fr9 <- log(df$entree_fr9 + 1)
-df$log_entree_fr10 <- log(df$entree_fr10 + 1)
-df$log_entree_fr11 <- log(df$entree_fr11 + 1)
-df$log_entree_fr12 <- log(df$entree_fr12 + 1)
-df$log_entree_fr13 <- log(df$entree_fr13 + 1)
-df$log_seance_fr1 <- log(df$seance_fr1 + 1)
-df$log_seance_fr2 <- log(df$seance_fr2 + 1)
-df$log_seance_fr3 <- log(df$seance_fr3 + 1)
-df$log_seance_fr4 <- log(df$seance_fr4 + 1)
-df$log_seance_fr5 <- log(df$seance_fr5 + 1)
-df$log_seance_fr6 <- log(df$seance_fr6 + 1)
-df$log_seance_fr7 <- log(df$seance_fr7 + 1)
-df$log_seance_fr8 <- log(df$seance_fr8 + 1)
-df$log_seance_fr9 <- log(df$seance_fr9 + 1)
-df$log_seance_fr10 <- log(df$seance_fr10 + 1)
-df$log_seance_fr11 <- log(df$seance_fr11 + 1)
-df$log_seance_fr12 <- log(df$seance_fr12 + 1)
-df$log_seance_fr13 <- log(df$seance_fr13 + 1)
+# Set MoyennePresse and MoyenneSpectateur to the mean if no value is specified.
+mean_moy <- mean(fr_df[!is.na(fr_df$MoyennePresse), 'MoyennePresse'])
+fr_df[is.na(fr_df$MoyennePresse), 'MoyennePresse'] <- mean_moy
+mean_moy <- mean(fr_df[!is.na(fr_df$MoyenneSpectateur), 'MoyenneSpectateur'])
+fr_df[is.na(fr_df$MoyenneSpectateur), 'MoyenneSpectateur'] <- mean_moy
+
+# Repeat each columns 13 times.
+n <- nrow(fr_df)
+df <- fr_df[rep(1:n, each=13),]
+
+# Add a column to indicate the week.
+df$t <- rep(0:12, n)
+
+# Replace the variables for each week (e.g. 'entree_paris1') with a global variable (e.g. 'entree_paris')
+for (i in 0:12) {
+	for (variable in c('entree_paris', 'seance_paris', 'entree_fr', 'seance_fr')) {
+		# Concatenate the variable name with and indicator for the week (e.g. 'entree_paris1').
+		variable_t <- paste(c(variable, toString(i+1)), collapse='')
+		# For each week, the variable in the new df (e.g. 'entree_paris') is taken from the old df (e.g. 'entree_paris1').
+		df[df$t==i, variable] <- fr_df[,variable_t]
+	}
+}
+
+# Keep only the useful variables.
+df <- df[,c(1:6, 33:43, 70:85)]
+
+# Replace the NAs in seance_fr with zeros.
+df[is.na(df$seance_fr), 'seance_fr'] <- 0
+
+# Generate logarithm of sales and screens.
+df$log_entree_paris <- log(df$entree_paris + 1)
+df$log_seance_paris <- log(df$seance_paris + 1)
+df$log_entree_fr <- log(df$entree_fr + 1)
+df$log_seance_fr <- log(df$seance_fr + 1)
+
+# Variable id_distributeur is a factor.
+df$id_distributeur <- as.factor(df$id_distributeur)
+
+# Variable id is a factor (this is used for movie dummies with the package lfe).
+df$X <- as.factor(df$X)
+df$X.eff <- rnorm(nlevels(df$X))
 
 ###############
 #  Surprises  #
 ###############
 
-# regression of first week sales on number of screens
-regSurprise1 <- lm(log_entree_fr1 ~ log_seance_fr1, data = df)
-# including dummies for genre
-regSurprise2 <- lm(log_entree_fr1 ~ log_seance_fr1 + genre, data = df)
-# including dummies for ratings 
-regSurprise3 <- lm(log_entree_fr1 ~ log_seance_fr1 + genre + interdiction, data = df)
-# including dummies for distributor 
-regSurprise4 <- lm(log_entree_fr1 ~ log_seance_fr1 + genre + id_distributeur, data = df)
-# including dummies for month and week 
-regSurprise5 <- lm(log_entree_fr1 ~ log_seance_fr1 + genre + id_distributeur + mois + semaine, data = df)
-# including dummies for year 
-regSurprise6 <- lm(log_entree_fr1 ~ log_seance_fr1 + genre + id_distributeur + mois + semaine + annee, data = df)
-# including other variables
-regSurprise7 <- lm(log_entree_fr1 ~ log_seance_fr1 + genre + id_distributeur + mois + semaine + annee + MoyennePresse + MoyenneSpectateur + PoidsCasting + pub, data = df)
+# In this part, we estimate the surprises of the movies.
 
-# display the coefficients of log screens of all the regressions
-lscreensCoef <- c(coefficients(regSurprise1)[2], coefficients(regSurprise2)[2], coefficients(regSurprise3)[2], coefficients(regSurprise4)[2], coefficients(regSurprise5)[2], coefficients(regSurprise6)[2], coefficients(regSurprise7)[2])
-lscreensCoef
-# display the standard error of log screens for all the regressions
-lscreensSe <- c(summary(regSurprise1)$coefficients[2, 2], summary(regSurprise2)$coefficients[2, 2], summary(regSurprise3)$coefficients[2, 2], summary(regSurprise4)$coefficients[2, 2], summary(regSurprise5)$coefficients[2, 2], summary(regSurprise6)$coefficients[2, 2], summary(regSurprise7)$coefficients[2, 2])
-lscreensSe
-# display the R squared of all the regressions
-rsquared <- c(summary(regSurprise1)$r.squared, summary(regSurprise2)$r.squared, summary(regSurprise3)$r.squared, summary(regSurprise4)$r.squared, summary(regSurprise5)$r.squared, summary(regSurprise6)$r.squared, summary(regSurprise7)$r.squared)
-rsquared
+# Regression of first week sales on number of screens.
+regSurprise1 <- lm(log_entree_paris ~ log_seance_paris, data = df, subset = (t==0))
+# Including dummies for genre
+regSurprise2 <- lm(log_entree_paris ~ log_seance_paris + genre, data = df, subset = (t==0))
+# Including dummies for ratings 
+regSurprise3 <- lm(log_entree_paris ~ log_seance_paris + genre + interdiction, data = df, subset = (t==0))
+# Including dummies for distributor 
+regSurprise4 <- lm(log_entree_paris ~ log_seance_paris + genre + interdiction + id_distributeur, data = df, subset = (t==0))
+# Including dummies for month and week 
+regSurprise5 <- lm(log_entree_paris ~ log_seance_paris + genre + interdiction + id_distributeur + factor(mois) + factor(semaine), data = df, subset = (t==0))
+# Including dummies for year 
+regSurprise6 <- lm(log_entree_paris ~ log_seance_paris + genre + interdiction + id_distributeur + factor(mois) + factor(semaine) + factor(annee), data = df, subset = (t==0))
+# Including other variables
+regSurprise7 <- lm(log_entree_paris ~ log_seance_paris + genre + interdiction + id_distributeur + factor(mois) + factor(semaine) + factor(annee) + MoyennePresse + MoyenneSpectateur + PoidsCasting + pub, data = df, subset = (t==0))
 
-# surprises are defined as the residuals of the regression
-df$surprise <- residuals(regSurprise3)
+# Print a table with the results of the last regressions.
+stargazer(regSurprise1, regSurprise2, regSurprise3, regSurprise4, regSurprise5, regSurprise6, regSurprise7, type='text', keep=c('log_seance_paris'), omit.stat=c("f", "ser"), title='Regression of first-week entries on number of screens')
+
+# Surprises are defined as the residuals of the last regression.
+surprise <- residuals(regSurprise7)
+df$surprise <- rep(residuals(regSurprise3), each = 13)
 quantile(df$surprise, probs = c(0, .05, .1, .25, .5, .75, .9, .95, 1))
 
-# build a data frame with an entry for each week
-n <- length(df$id_film)
-N <- 13*n
-df2 <- data.frame(1:N)
-df2$id <- rep(df$id_film, each=13)
-df2$surprise <- rep(df$surprise, each=13)
-df2$t <- rep(1:13, n)
-df2[df2$t==1, 'entree'] <- df$entree_fr1
-df2[df2$t==2, 'entree'] <- df$entree_fr2
-df2[df2$t==3, 'entree'] <- df$entree_fr3
-df2[df2$t==4, 'entree'] <- df$entree_fr4
-df2[df2$t==5, 'entree'] <- df$entree_fr5
-df2[df2$t==6, 'entree'] <- df$entree_fr6
-df2[df2$t==7, 'entree'] <- df$entree_fr7
-df2[df2$t==8, 'entree'] <- df$entree_fr8
-df2[df2$t==9, 'entree'] <- df$entree_fr9
-df2[df2$t==10, 'entree'] <- df$entree_fr10
-df2[df2$t==11, 'entree'] <- df$entree_fr11
-df2[df2$t==12, 'entree'] <- df$entree_fr12
-df2[df2$t==13, 'entree'] <- df$entree_fr13
-df2[df2$t==1, 'seance'] <- df$seance_fr1
-df2[df2$t==2, 'seance'] <- df$seance_fr2
-df2[df2$t==3, 'seance'] <- df$seance_fr3
-df2[df2$t==4, 'seance'] <- df$seance_fr4
-df2[df2$t==5, 'seance'] <- df$seance_fr5
-df2[df2$t==6, 'seance'] <- df$seance_fr6
-df2[df2$t==7, 'seance'] <- df$seance_fr7
-df2[df2$t==8, 'seance'] <- df$seance_fr8
-df2[df2$t==9, 'seance'] <- df$seance_fr9
-df2[df2$t==10, 'seance'] <- df$seance_fr10
-df2[df2$t==11, 'seance'] <- df$seance_fr11
-df2[df2$t==12, 'seance'] <- df$seance_fr12
-df2[df2$t==13, 'seance'] <- df$seance_fr13
-df2$log_entree <- log(df2$entree + 1)
-df2$log_seance <- log(df2$seance + 1)
+# Generate additional variables for surprises.
+df$positive_surprise <- df$surprise >= 0
+q_surprise <- quantile(df$surprise, probs = c(1/3, 2/3))
+df$bottom_surprise <- df$surprise < q_surprise[1]
+df$middle_surprise <- df$surprise >= q_surprise[1] & df$surprise < q_surprise[2]
+df$top_surprise <- df$surprise >= q_surprise[2]
 
-# generate variables for surprises
-df2$positive_surprise <- df2$surprise >= 0
-q_surprise <- quantile(df2$surprise, probs = c(1/3, 2/3))
-df2$bottom_surprise <- df2$surprise < q_surprise[1]
-df2$middle_surprise <- df2$surprise >= q_surprise[1] & df2$surprise < q_surprise[2]
-df2$top_surprise <- df2$surprise >= q_surprise[2]
+###############################################
+#  Prediction 1: Surprises and Sale Dynamics  #
+###############################################
 
-# surprises and sale dynamics
-df2$id <- as.factor(df2$id)
-#df2$id.eff <- rnorm(nlevels(df2$id))
-regSaleDynamics1 <- felm(log_entree ~ t | id, data = df2)
-regSaleDynamics2 <- felm(log_entree ~ t + t : surprise | id, data = df2)
-regSaleDynamics3 <- felm(log_entree ~ t + t : positive_surprise | id, data = df2)
-regSaleDynamics4 <- felm(log_entree ~ t : bottom_surprise + t : middle_surprise | id, data = df2)
+# In this part, we study the difference in rate of decline between movies with a positive surprise and movies with a negative surprise.
 
-## test for supply effects
-#regSaleDynamics5 <- felm(salesperscreen ~ t | id, data = df)
-#regSaleDynamics6 <- felm(salesperscreen ~ t + t : surprise | id, data = df)
-#regSaleDynamics7 <- felm(salesperscreen ~ t + t : positive_surprise | id, data = df)
-#regSaleDynamics8 <- felm(salesperscreen ~ t : bottom_surprise + t : middle_surprise | id, data = df)
+# Regression of sales on the interaction between time and surprises.
+# We use the command felm of the package lfe to compute linear regressions with thousands of dummies.
+regSaleDynamics1 <- felm(log_entree_paris ~ t | X, data = df)
+regSaleDynamics2 <- felm(log_entree_paris ~ t + t : surprise | X, data = df)
+regSaleDynamics3 <- felm(log_entree_paris ~ t + t : positive_surprise | X, data = df)
+regSaleDynamics4 <- felm(log_entree_paris ~ t : bottom_surprise + t : middle_surprise | X, data = df)
 
-############################
-#  Precision of the Prior  #
-############################
+# Print a table with the results of the regressions.
+stargazer(regSaleDynamics1, regSaleDynamics2, regSaleDynamics3, regSaleDynamics4, type='text', omit.stat=c("f", "ser"), title='Decline in box-office sales by opening week surprise')
 
-# a dummy for sequels is used to reflect the precision of the prior
-df2$sequel = rep(df$saga, each=13)
-# we compute the variance of the surprise by genre to reflect the precision of the prior
-variance_surprise <- ave(df$surprise, df$genre, FUN=var)
-df2$var_surprise <- rep(variance_surprise, each=13)
+##########################################
+#  Prediction 2: Precision of the Prior  #
+##########################################
 
-regPrior1 <- felm(log_entree ~ t + t:positive_surprise + t:sequel + t:positive_surprise:sequel | id, data = df2)
-regPrior2 <- felm(log_entree ~ t + t:positive_surprise + t:var_surprise + t:positive_surprise:var_surprise | id, data = df2)
+# In this part, we test if the precision of the prior has an impact on social learning.
 
-################################
-#  Size of the Social Network  #
-################################
+# We compute the variance of the surprise by genre to measure the precision of the prior.
+variance_surprise <- ave(df$surprise[df$t==0], df$genre[df$t==0], FUN=var)
+df$var_surprise <- rep(variance_surprise, each=13)
+# Display the variance of the surprises for each genre.
+#for(g in unique(df$genre)) {
+	#print(g)
+	#print(df[df$genre==g, 'var_surprise'][1])
+#}
 
-# create a dummy for toutpublic movies
-df2$toutpublic = rep(df$toutpublic, each=13)
+# Regression of sales on the interaction between time, surprise and an indicator for the precision of the prior (sequel or variance by genre). 
+regPrior1 <- felm(log_entree_paris ~ t + t:positive_surprise + t:saga + t:positive_surprise:saga | X, data = df)
+regPrior2 <- felm(log_entree_paris ~ t + t:positive_surprise + t:var_surprise + t:positive_surprise:var_surprise | X, data = df)
+regPrior3 <- felm(log_entree_paris ~ t + t:positive_surprise + t:art_essai + t:positive_surprise:art_essai | X, data = df)
 
-regSocialNetwork1 <- felm(log_entree ~ t + t:positive_surprise + t:toutpublic + t:positive_surprise:toutpublic | id, data = df2)
+# Print a table with the results of the two regressions.
+stargazer(regPrior1, regPrior2, regPrior3, type='text', omit.stat=c("f", "ser"), title='Precision of the prior')
 
-df2$nb_screens <- rep(df$seance_fr1/1000, each=13)
-regSocialNetwork2 <- felm(log_entree ~ t + t:positive_surprise + t:nb_screens + t:positive_surprise:nb_screens | id, data = df2)
+##############################################
+#  Prediction 3: Size of the Social Network  #
+##############################################
 
-#######################
-#  Decline over time  #
-#######################
+# In this part, we test if the size of the social network has an impact on social learning.
 
-regDecline <- felm(log_entree ~ t + I(t**2) + t:positive_surprise + I(t**2):positive_surprise | id, data = df2)
+# Regression of sales on the interaction between time, surprise and an indicator for the size of the social network
+regSocialNetwork1 <- felm(log_entree_paris ~ t + t:positive_surprise + t:toutpublic + t:positive_surprise:toutpublic | X, data = df)
+df$seance_paris_first_week <- rep(df[df$t==0, 'seance_paris'], each=13)/1000
+regSocialNetwork2 <- felm(log_entree_paris ~ t + t:positive_surprise + t:seance_paris_first_week + t:positive_surprise:seance_paris_first_week | X, data = df)
 
-#TODO: one-tailed test
+# Print a table with the results of the regressions.
+stargazer(regSocialNetwork1, regSocialNetwork2, type='text', omit.stat=c("f", "ser"), title="Precision of peers' signal")
+
+#####################################
+#  Prediction 4: Decline over time  #
+#####################################
+
+# In this part, we study the convexity of the sales profile.
+
+# Regression of sales on t, t^2, the interaction between surprise and t and the interaction between surprise and t^2.
+regDecline <- felm(log_entree_paris ~ t + I(t**2) + t:positive_surprise + I(t**2):positive_surprise | X, data = df)
+
+# Print a table with the results of the regression.
+stargazer(regDecline, type='text', omit.stat=c("f", "ser"), title="Convexity of the sales profile")
+
+# Test the hypothesis 2(t^2 + t^2:positive_surprise) < 0 (decline of positive surprise movies should be concave).
+coeff <- coefficients(regDecline)
+varcov_matrix <- vcov(regDecline)
+# Compute the variance of 2(t^2 + t^2:positive_surprise).
+variance <- 4 * ( varcov_matrix[2, 2] + varcov_matrix[4, 4] + 2*varcov_matrix[2, 4] )
+# Compute the value of the statistics.
+statistics <- 2 * (coeff[2] + coeff[4]) / variance^(1/2)
+# Compute the p-value (the statistics follows a standard normal distribution). 
+pvalue_pos <- pnorm(statistics)
+
+# Test the hypothesis 2 t^2 > 0 (decline of negative surprise movies should be convex).
+# Compute the variance of 2 t^2.
+variance <- varcov_matrix[2, 2]
+# Compute the value of the statistics.
+statistics <- coeff[2] / variance^(1/2)
+# Compute the p-value (the statistics follows a standard normal distribution). 
+pvalue_neg <- pnorm(-statistics)
 
 ###########
 #  Graph  #
 ###########
 
-# compute the average sales each week for movies with positive surprises and movies with negative surprises
+# In this part, we plot graphs to show the decline of sales over time for movies with negative surprises and movies with positive surprises.
+
+# Compute the average sales each week for movies with positive surprises and movies with negative surprises.
 average_pos <- NULL
 average_neg <- NULL
-
-for (t in c(1:13)){
-	av <- mean(df2[df2$t == t & df2$positive_surprise == TRUE, 'log_entree'])
+for (t in c(0:12)){
+	av <- mean(df[df$t == t & df$positive_surprise == TRUE, 'log_entree_paris'])
 	average_pos <- append(average_pos, av)
 }
-for (t in c(1:13)){
-	av <- mean(df2[df2$t == t & df2$positive_surprise == FALSE, 'log_entree'])
+for (t in c(0:12)){
+	av <- mean(df[df$t == t & df$positive_surprise == FALSE, 'log_entree_paris'])
 	average_neg <- append(average_neg, av)
 }
 
-t <- c(1:13)
+t <- c(0:12)
 
-# plot a graph with the average observed sales
+# Plot a graph with the average observed sales
 plot(t, average_pos
      , type='b'
      , col='red'
@@ -226,39 +207,3 @@ lines(t, average_neg
       , type='b'
       , col='blue')
 legend(5.5, 14, legend=c('Positive', 'Negative'), col=c('red', 'blue'), lty=1, cex=0.8)
-
-# plot a graph with the average predicted sales
-x <- coefficients(regDecline)
-average_neg_pred <- average_neg[1] + x[1] * t + x[2] * t^2
-average_pos_pred <- average_pos[1] + (x[1]+x[3]) * t + (x[2]+x[4]) * t^2
-plot(t, average_pos_pred
-     , type='b'
-     , col='red'
-     , ylim=c(0, 15)
-     , main='Decline in sale for movies with positive and negative surprises'
-     , xlab='Week'
-     , ylab='Log Sales')
-lines(t, average_neg_pred
-      , type='b'
-      , col='blue')
-legend(5.5, 14, legend=c('Positive predicted', 'Negative predicted'), col=c('red', 'blue'), lty=1, cex=0.8)
-
-# plot both
-plot(t, average_pos
-     , type='b'
-     , col='red'
-     , ylim=c(0, 15)
-     , main='Decline in sale for movies with positive and negative surprises'
-     , xlab='Week'
-     , ylab='Log Sales')
-lines(t, average_neg
-      , type='b'
-      , col='blue')
-lines(t, average_pos_pred
-     , type='b'
-     , col='green')
-lines(t, average_neg_pred
-      , type='b'
-      , col='black')
-legend(5.5, 14, legend=c('Positive observed', 'Negative observed', 'Positive predicted', 'Negative predicted'), col=c('red', 'blue', 'green', 'black'), lty=1, cex=0.8)
-
