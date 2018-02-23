@@ -75,7 +75,8 @@ df$id.eff <- rnorm(nlevels(df$id))
 df$sequel <- df$genre1 == 'Sequel'
 # Teen movies are used to measure the size of the social network.
 df$network_size <- df$genre1 %in% c('Action', 'Aventure', 'Comedy', 'Fantasy', 'Horror', 'Sci-Fi', 'Suspense')
-df$network_size2 <- df$genre3 %in% c('Children', 'Youth')
+df$network_size2 <- df$genre2 %in% c('Children', 'Youth')
+df$network_size3 <- df$genre3 %in% c('Children', 'Youth')
 
 
 ########################
@@ -119,11 +120,11 @@ regSurprise4 <- lm(log_sales_first_we ~ log_screens_first_week + genre1 + rating
 # Including dummies for distributor.
 regSurprise5 <- lm(log_sales_first_we ~ log_screens_first_week + genre1 + rating + cost + distributor, data = df, subset = (t==0))
 # Including dummies for weekday, month and week.
-regSurprise6 <- lm(log_sales_first_we ~ log_screens_first_week + genre1 + rating + cost + distributor + weekday + month + week, data = df, subset = (t==0))
+regSurprise6 <- lm(log_sales_first_we ~ log_screens_first_week + genre1 + rating + cost + distributor + weekday + factor(month) + factor(week), data = df, subset = (t==0))
 # Including dummies for year.
-regSurprise7 <- lm(log_sales_first_we ~ log_screens_first_week + genre1 + rating + cost + distributor + weekday + month + week + year, data = df, subset = (t==0))
+regSurprise7 <- lm(log_sales_first_we ~ log_screens_first_week + genre1 + rating + cost + distributor + weekday + factor(month) + factor(week) + factor(year), data = df, subset = (t==0))
 
-# Print a table with the results of the last regression.
+# Print a table with the results of the last regressions.
 stargazer(regSurprise1, regSurprise2, regSurprise3, regSurprise4, regSurprise5, regSurprise6, regSurprise7, type='text', keep=c('log_screens_first_week'), omit.stat=c("f", "ser"), title='Regression of first-weekend sales on number of screens')
 
 # Surprises are defined as the residuals of the last regression.
@@ -148,15 +149,14 @@ df$top_surprise <- df$surprise >= q_surprise[2]
 
 # Regression of sales on the interaction between time and surprises.
 # We use the command felm of the package lfe to compute linear regressions with thousands of dummies.
-#TODO: problem with the standard errors
 regSaleDynamics1 <- felm(log_sales ~ t | id, data = df)
 regSaleDynamics2 <- felm(log_sales ~ t + t : surprise | id, data = df)
 regSaleDynamics3 <- felm(log_sales ~ t + t : positive_surprise | id, data = df)
 regSaleDynamics4 <- felm(log_sales ~ 0 + I(t*bottom_surprise) + I(t*middle_surprise) + I(t*top_surprise) | id, data = df)
 
 # Print a table with the results of the regressions.
-test <-stargazer(regSaleDynamics1, regSaleDynamics2, regSaleDynamics3, regSaleDynamics4, omit.stat=c("f", "ser"), title='Decline in box-office sales by opening week surprise',out = "coucou.tex");
-print(test, file = "filename2.tex")
+stargazer(regSaleDynamics1, regSaleDynamics2, regSaleDynamics3, regSaleDynamics4, type='text', omit.stat=c("f", "ser"), title='Decline in box-office sales by opening week surprise')
+
 ##########################################
 #  Prediction 2: Precision of the Prior  #
 ##########################################
@@ -188,11 +188,12 @@ stargazer(regPrior1, regPrior2, type='text', omit.stat=c("f", "ser"), title='Pre
 # Regression of sales on the interaction between time, surprise and an indicator for the size of the social network
 regSocialNetwork1 <- felm(log_sales ~ t + t:positive_surprise + t:network_size + t:positive_surprise:network_size | id, data = df)
 regSocialNetwork2 <- felm(log_sales ~ t + t:positive_surprise + t:network_size2 + t:positive_surprise:network_size2 | id, data = df)
+regSocialNetwork3 <- felm(log_sales ~ t + t:positive_surprise + t:network_size3 + t:positive_surprise:network_size3 | id, data = df)
 df$nb_screens <- df$screens_first_week/1000
-regSocialNetwork3 <- felm(log_sales ~ t + t:positive_surprise + t:nb_screens + t:positive_surprise:nb_screens | id, data = df)
+regSocialNetwork4 <- felm(log_sales ~ t + t:positive_surprise + t:nb_screens + t:positive_surprise:nb_screens | id, data = df)
 
 # Print a table with the results of the regressions.
-stargazer(regSocialNetwork1, regSocialNetwork2, regSocialNetwork3, type='text', omit.stat=c("f", "ser"), title="Precision of peers' signal")
+stargazer(regSocialNetwork1, regSocialNetwork2, regSocialNetwork3, regSocialNetwork4, type='text', omit.stat=c("f", "ser"), title="Precision of peers' signal")
 
 #####################################
 #  Prediction 4: Decline over time  #
@@ -256,6 +257,3 @@ lines(t, average_neg
       , type='b'
       , col='blue')
 legend(5.5, 14, legend=c('Positive', 'Negative'), col=c('red', 'blue'), lty=1, cex=0.8)
-
-dev.copy(jpeg,filename="plot.png");
-dev.off ();
