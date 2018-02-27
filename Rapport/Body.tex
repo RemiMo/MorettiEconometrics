@@ -11,10 +11,14 @@
 \usepackage{fancyhdr}
 \usepackage[Glenn]{fncychap}
 \usepackage{theorem}
+\usepackage{hyperref}
+\hypersetup{backref, pdfpagemode=FullScreen, colorlinks=true, linkcolor={blue}}
+%\usepackage[]{color}
 \setlength{\headheight}{15.5pt}
 \title{Project in applied econometrics\\ Report}
 \author{Lucas Javaudin, Robin Le Huérou-Kérisel, Rémi Moreau}
 \date{March 2018}
+
 \begin{document}
 \maketitle
 
@@ -44,10 +48,11 @@
 	This project has aimed at reproducing Moretti's 2011 paper on social learning effects in movie sales with R. We also blabla. Main results:
 \end{abstract}
 \tableofcontents
+\pagebreak
 \section{Intuitions and detailed presentation of the model}
 
 \input{part1.tex}
-
+\pagebreak
 \section{Analysis and main results}
 
 \input{part2.1_robin}

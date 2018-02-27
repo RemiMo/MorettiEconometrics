@@ -1,1 +1,52 @@
-ici robin
+%sec1: comment trouve-t-on les surprises
+%sec2: surprises and sale dynamics
+%sec3: precision of the prior
+
+%Sales of movies with positive surprise and sales of movies with negative surprise should diverge over time. To test this, we need to regress the log of sales on time and the interaction between time and surprise. If the coefficient of the interaction between time and surprise is significantly positive, then the sales of movies with positive surprise decrease slower than the sale of movies with negative surprise. If our results are consistent with those of Moretti, we should find that controlling for advertising, critic reviews and other variables does not affect significantly the results.
+
+% The effect of a surprise should be lower for movies with a more precise prior. To test this, we augment the previous regression equation with the interaction of time and the precision of the prior and the interaction of time, precision of the prior and surprise of the movie (whose coefficient is predicted to be negative). The precision of the prior can be a dummy for sequels (sequels are assumed to have a more precise prior) or can be measured by the variance of the first week surprise for movies of the same genre.
+
+Surprises consist in the residuals of the regression of the log-number of sales in the first week on the log-number of screens available (opened by theaters). This definition of surprises holds because we suppose that theaters are profit-maximizing agents and make use of all the available information to predict the success of a movie. If this definition is correct, we should expect log-number of screens opened by theaters first week to be a good indicator of knowledge available on the movie quality before it is released. In the Table \ref{part2.1_tab1} we reproduce Moretti's regression of \textit{log\_sales\_first\_week} on \textit{log\_screens\_first\_week}. Each column is the result of the regression when we control with some variables (film genre, rating available, cost, distributor, weekday, month, week, year). The fact that adding control variables doesn't change the robustness of the regression proves Moretti's point which is that theaters take into account these factors when deciding the number of 
+
+\begin{table}[!htbp] \centering 
+	\caption{Regression of first-weekend sales on number of screens} 
+	\label{part2.1_tab1} 
+	\begin{tabular}{@{\extracolsep{5pt}}lccccccc} 
+		\\[-1.8ex]\hline 
+		\hline \\[-1.8ex] 
+		& \multicolumn{7}{c}{\textit{Dependent variable:}} \\ 
+		\cline{2-8} 
+		\\[-1.8ex] & \multicolumn{7}{c}{log\_sales\_first\_week} \\ 
+		\\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7)\\ 
+		\hline \\[-1.8ex] 
+		log\_screens\_first\_week & 0.893$^{***}$ & 0.896$^{***}$ & 0.883$^{***}$ & 0.871$^{***}$ & 0.803$^{***}$ & 0.806$^{***}$ & 0.813$^{***}$ \\ 
+		& (0.004) & (0.005) & (0.005) & (0.005) & (0.006) & (0.006) & (0.006) \\ 
+		& & & & & & & \\ 
+		\hline \\[-1.8ex] 
+		R$^{2}$ & 0.907 & 0.909 & 0.910 & 0.912 & 0.932 & 0.936 & 0.938 \\ 
+		Adjusted R$^{2}$ & 0.907 & 0.908 & 0.910 & 0.912 & 0.928 & 0.931 & 0.933 \\ 
+		\hline 
+		\hline \\[-1.8ex] 
+		\textit{Note:}  & \multicolumn{7}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+	\end{tabular} 
+\end{table} 
+
+\begin{table}[!htbp] \centering 
+	\caption{Regression of first-weekend sales on control variables} 
+	\label{} 
+	\begin{tabular}{@{\extracolsep{5pt}}lc} 
+		\\[-1.8ex]\hline 
+		\hline \\[-1.8ex] 
+		& \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+		\cline{2-2} 
+		\\[-1.8ex] & log\_sales\_first\_we \\ 
+		\hline \\[-1.8ex] 
+		\hline \\[-1.8ex] 
+		Observations & 4,992 \\ 
+		R$^{2}$ & 0.699 \\ 
+		Adjusted R$^{2}$ & 0.674 \\ 
+		\hline 
+		\hline \\[-1.8ex] 
+		\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+	\end{tabular} 
+\end{table}
