@@ -1,0 +1,24 @@
+notes:
+art et essai: impact sur la taille du réseau ou sur la précision du prix (plus de social learning?)
+ne pas inclure moyenne spectateurs dans la reg
+
+dans le rapport:
+-présentation du modèle (<5 pages, il faut vulgariser le modèle pour que quelqu'un qui ne connait pas le modèle puisse le comprendre --déjà fait en partie dans le mid-term report)
+-présentation des jeux de données
+-expliquer des parties intéressantes du code
+-graphiques intéressants (?)
+-prendre exemple sur l'article de Moretti
+-critiques intéressantes (les variables utilisées par Moretti -- explications parfois douteuses ou manquant de justifications scientifiques)
+
+
+-mettre en parrallèle les régressions et les résultats
+-donner les résultats intéressants
+-test de student pour la convexiter et concavité
+
+
+Pour Robin:
+sec1: comment trouve-t-on les surprises
+sec2: surprises and sale dynamics
+sec3: precision of the prior
+
+

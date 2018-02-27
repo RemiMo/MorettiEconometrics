@@ -1,0 +1,60 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{lmodern}
+%\usepackage[includeheadfoot,left=1cm,right=1cm,top=1cm,bottom=1cm]{geometry}
+\usepackage{fullpage}
+\usepackage{fancyhdr}
+\usepackage[Glenn]{fncychap}
+\usepackage{theorem}
+\setlength{\headheight}{15.5pt}
+\title{Project in applied econometrics\\ Report}
+\author{Lucas Javaudin, Robin Le Huérou-Kérisel, Rémi Moreau}
+\date{March 2018}
+\begin{document}
+\maketitle
+
+%notes:
+%art et essai: impact sur la taille du réseau ou sur la précision du prix (plus de social learning?)
+%ne pas inclure moyenne spectateurs dans la reg
+%
+%Quelques éléments à inclure dans le rapport:
+%-présentation du modèle (<5 pages, il faut vulgariser le modèle pour que quelqu'un qui ne connait pas le modèle puisse le comprendre --déjà fait en partie dans le mid-term report)
+%-présentation des jeux de données
+%-expliquer des parties intéressantes du code
+%-graphiques intéressants (?)
+%-prendre exemple sur l'article de Moretti
+%-critiques intéressantes (les variables utilisées par Moretti -- explications parfois douteuses ou manquant de justifications scientifiques)
+%
+%
+%-mettre en parrallèle les régressions et les résultats
+%-donner les résultats intéressants
+%-test de student pour la convexité et concavité
+%
+%
+%Pour Robin:
+%sec1: comment trouve-t-on les surprises
+%sec2: surprises and sale dynamics
+%sec3: precision of the prior
+\begin{abstract}
+	This project has aimed at reproducing Moretti's 2011 paper on social learning effects in movie sales with R. We also blabla. Main results:
+\end{abstract}
+\tableofcontents
+\section{Intuitions and detailed presentation of the model}
+
+\input{part1.tex}
+
+\section{Analysis and main results}
+
+\input{part2.1_robin}
+
+
+\input{part2.2_lucas.tex}
+\section{Conclusion: some comments}
+
+
+\end{document}
