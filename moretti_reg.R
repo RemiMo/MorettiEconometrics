@@ -123,9 +123,13 @@ regSurprise5 <- lm(log_sales_first_we ~ log_screens_first_week + genre1 + rating
 regSurprise6 <- lm(log_sales_first_we ~ log_screens_first_week + genre1 + rating + cost + distributor + weekday + factor(month) + factor(week), data = df, subset = (t==0))
 # Including dummies for year.
 regSurprise7 <- lm(log_sales_first_we ~ log_screens_first_week + genre1 + rating + cost + distributor + weekday + factor(month) + factor(week) + factor(year), data = df, subset = (t==0))
-
 # Print a table with the results of the last regressions.
 stargazer(regSurprise1, regSurprise2, regSurprise3, regSurprise4, regSurprise5, regSurprise6, regSurprise7, type='text', keep=c('log_screens_first_week'), omit.stat=c("f", "ser"), title='Regression of first-weekend sales on number of screens')
+#regSurprise8 <- lm(log_sales_first_we ~ genre1 + rating + cost + distributor + weekday + factor(month) + factor(week) + factor(year), data = df, subset = (t==0))
+#stargazer(regSurprise8, keep=c('log_screens_first_week'), keep=c('rating','cost','weekday'), omit.stat=c("f", "ser") , title='Regression of first-weekend sales on control variables')
+
+#tab1<-stargazer(regSurprise1, regSurprise2, regSurprise3, regSurprise4, regSurprise5, regSurprise6, regSurprise7, keep=c('log_screens_first_week'), omit.stat=c("f", "ser"), title='Regression of first-weekend sales on number of screens',out = "part2.1_reg1.tex");
+
 
 # Surprises are defined as the residuals of the last regression.
 surprise <- residuals(regSurprise7)
@@ -257,3 +261,6 @@ lines(t, average_neg
       , type='b'
       , col='blue')
 legend(5.5, 14, legend=c('Positive', 'Negative'), col=c('red', 'blue'), lty=1, cex=0.8)
+
+dev.copy(jpeg,filename="plot_moretti.png");
+dev.off ();
