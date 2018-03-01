@@ -56,6 +56,9 @@ df$id_distributeur <- as.factor(df$id_distributeur)
 df$X <- as.factor(df$X)
 df$X.eff <- rnorm(nlevels(df$X))
 
+# Variable pour les films hors d'Europe et des États-Unis.
+df$ResteMonde <- df$Europe==0 & df$France==0 & df$USA == 0
+
 ###############
 #  Surprises  #
 ###############
@@ -75,7 +78,7 @@ regSurprise5 <- lm(log_entree_paris ~ log_seance_paris + genre + interdiction + 
 # Including dummies for year 
 regSurprise6 <- lm(log_entree_paris ~ log_seance_paris + genre + interdiction + id_distributeur + factor(mois) + factor(semaine) + factor(annee), data = df, subset = (t==0))
 # Including other variables
-regSurprise7 <- lm(log_entree_paris ~ log_seance_paris + genre + interdiction + id_distributeur + factor(mois) + factor(semaine) + factor(annee) + MoyennePresse + MoyenneSpectateur + PoidsCasting + pub, data = df, subset = (t==0))
+regSurprise7 <- lm(log_entree_paris ~ log_seance_paris + genre + interdiction + id_distributeur + factor(mois) + factor(semaine) + factor(annee) + MoyennePresse + sigma_note_presse + PoidsCasting + pub, data = df, subset = (t==0))
 
 # Print a table with the results of the last regressions.
 stargazer(regSurprise1, regSurprise2, regSurprise3, regSurprise4, regSurprise5, regSurprise6, regSurprise7, type='text', keep=c('log_seance_paris'), omit.stat=c("f", "ser"), title='Regression of first-week entries on number of screens')
@@ -127,9 +130,10 @@ df$var_surprise <- rep(variance_surprise, each=13)
 regPrior1 <- felm(log_entree_paris ~ t + t:positive_surprise + t:saga + t:positive_surprise:saga | X, data = df)
 regPrior2 <- felm(log_entree_paris ~ t + t:positive_surprise + t:var_surprise + t:positive_surprise:var_surprise | X, data = df)
 regPrior3 <- felm(log_entree_paris ~ t + t:positive_surprise + t:art_essai + t:positive_surprise:art_essai | X, data = df)
+regPrior4 <- felm(log_entree_paris ~ t + t:positive_surprise + t:ResteMonde + t:positive_surprise:ResteMonde | X, data = df)
 
 # Print a table with the results of the two regressions.
-stargazer(regPrior1, regPrior2, regPrior3, type='text', omit.stat=c("f", "ser"), title='Precision of the prior')
+stargazer(regPrior1, regPrior2, regPrior3, regPrior4, type='text', omit.stat=c("f", "ser"), title='Precision of the prior')
 
 ##############################################
 #  Prediction 3: Size of the Social Network  #
@@ -267,6 +271,9 @@ df$id_distributeur <- as.factor(df$id_distributeur)
 df$X <- as.factor(df$X)
 df$X.eff <- rnorm(nlevels(df$X))
 
+# Variable pour les films hors d'Europe et des États-Unis.
+df$ResteMonde <- df$Europe==0 & df$France==0 & df$USA == 0
+
 ###############
 #  Surprises  #
 ###############
@@ -286,7 +293,7 @@ regSurprise5 <- lm(log_entree_fr ~ log_seance_fr + genre + interdiction + id_dis
 # Including dummies for year 
 regSurprise6 <- lm(log_entree_fr ~ log_seance_fr + genre + interdiction + id_distributeur + factor(mois) + factor(semaine) + factor(annee), data = df, subset = (t==0))
 # Including other variables
-regSurprise7 <- lm(log_entree_fr ~ log_seance_fr + genre + interdiction + id_distributeur + factor(mois) + factor(semaine) + factor(annee) + MoyennePresse + MoyenneSpectateur + PoidsCasting + pub, data = df, subset = (t==0))
+regSurprise7 <- lm(log_entree_fr ~ log_seance_fr + genre + interdiction + id_distributeur + factor(mois) + factor(semaine) + factor(annee) + MoyennePresse + sigma_note_presse + PoidsCasting + pub, data = df, subset = (t==0))
 
 # Print a table with the results of the last regressions.
 stargazer(regSurprise1, regSurprise2, regSurprise3, regSurprise4, regSurprise5, regSurprise6, regSurprise7, type='text', keep=c('log_seance_fr'), omit.stat=c("f", "ser"), title='Regression of first-week entries on number of screens')
@@ -338,9 +345,10 @@ df$var_surprise <- rep(variance_surprise, each=13)
 regPrior1 <- felm(log_entree_fr ~ t + t:positive_surprise + t:saga + t:positive_surprise:saga | X, data = df)
 regPrior2 <- felm(log_entree_fr ~ t + t:positive_surprise + t:var_surprise + t:positive_surprise:var_surprise | X, data = df)
 regPrior3 <- felm(log_entree_fr ~ t + t:positive_surprise + t:art_essai + t:positive_surprise:art_essai | X, data = df)
+regPrior4 <- felm(log_entree_fr ~ t + t:positive_surprise + t:ResteMonde + t:positive_surprise:ResteMonde | X, data = df)
 
 # Print a table with the results of the two regressions.
-stargazer(regPrior1, regPrior2, regPrior3, type='text', omit.stat=c("f", "ser"), title='Precision of the prior')
+stargazer(regPrior1, regPrior2, regPrior3, regPrior4, type='text', omit.stat=c("f", "ser"), title='Precision of the prior')
 
 ##############################################
 #  Prediction 3: Size of the Social Network  #
