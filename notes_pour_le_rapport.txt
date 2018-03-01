@@ -1,0 +1,32 @@
+Moretti affirme dans le papier supprimer les films qui n'ont ouvert qu'à NY et LA.
+Dans le code, il supprime en fait les films où le taux de croissance du nombre de salles de la première à la deuxième semaine est supérieur à 5, sans plus d'explications.
+Si l'on effectue les régressions en gardant ces films, les résultats restent quasiment identiques.
+
+Moretti détermine les surprises à partir des sales du premier week-end alors que pour les données françaises, nous utilisons les données de la première semaine car nous n'avons pas de données par WE.
+Si l'on utilise les sales de la première semaine pour les données américaines, les résultats ne changent quasiment pas.
+
+Moretti considère que les films pour adolescents sont les films classés en action, aventure, comedy, fantasy, horror, sci-fi et suspense dans la variable genre1.
+Il trouve bien un coefficient positif mais très faiblement négatif.
+Un meilleur indicateur serait les variables genre2 et genre3 qui contiennent une catégorie children et une catégorie youth.
+Avec genre2, on trouve un coefficient significativement négatif.
+Avec genre3, on trouve un coefficient significativement positif.
+
+Quand l'on calcule la variance des surprises par genre, on ne trouve pas les mêmes résultats que Moretti.
+Moretti trouve que Sequel a la deuxième plus faible variance et Action a la plus forte variance.
+On trouve que Sequel a une plus forte variance que Action.
+
+Le test sur la convexité et la concavité est concluant avec les données américaines.
+Avec les données fr, seul le test de convexité est concluant.
+Sur le graphique, on voit que la concavité n'est vérifié que les première semaines.
+
+Les données fr incluent directement les entrées donc pas besoin de corriger de l'inflation ou du prix des billets.
+
+Avec les données fr, on peut ajouter de nouvelles variables de contrôle pour la régression des surprises.
+
+Pour les régressions fr, les coefficients des triples régressions ont le signe attendu et sont souvent significatifs (exception: var_surprise pour la France).
+
+On peut penser que la précision du prior est plus faible pour les films d'arts et essai car on a du mal à juger de la qualité du film avant de le voir.
+Une autre interprétation aurait été de dire que les films d'arts et essai concernent un public plus restreint et donc le social network serait plus faible.
+Les régressions semble valider la première interprétation car le coefficient est positif.
+
+Idem, les films hors d'Europe et des États-Unis ont un prior moins précis.
