@@ -1,7 +1,85 @@
 \subsection{Size of the Social Network}
 \label{sub:size_of_the_social_network}
 
+Consumers with a larger social network receive more feedbacks from their peers and thus they are able to evaluate more precisely the quality of the movie.
+%More formally, this prediction can be tested by estimating the following model:
+%\[ \ln y_{jt}  = \beta_0 + \beta_1 t + \beta_2 (t \times S_j) + \beta_3 (t \times \text{network\_size}_j) + \beta_4 (t \times S_j \times \text{network\_size}_j) + d_j + u_{jt} \]
+%where $\text{network\_size}_j$ is a variable correlated with the network size of the people 
+
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Fri, Mar 02, 2018 - 05:12:24 PM
+\begin{table}[!htbp] \centering 
+  \caption{Precision of peers' signal} 
+  \label{precisionsignal} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & \multicolumn{2}{c}{log\_entree\_fr} \\ 
+\\[-1.8ex] & (1) & (2)\\ 
+\hline \\[-1.8ex] 
+ $t$ & $-$0.663$^{***}$ & $-$0.451$^{***}$ \\ 
+  & (0.007) & (0.005) \\ 
+  & & \\ 
+ $t$$\times$positive\_surprise & 0.061$^{***}$ & 0.076$^{***}$ \\ 
+  & (0.010) & (0.006) \\ 
+  & & \\ 
+ $t$$\times$tout\_public & 0.115$^{***}$ &  \\ 
+  & (0.008) &  \\ 
+  & & \\ 
+ $t$$\times$positive\_surprise$\times$tout\_public & 0.031$^{***}$ &  \\ 
+  & (0.011) &  \\ 
+  & & \\ 
+ $t$$\times$seance\_fr\_first\_week &  & $-$0.033$^{***}$ \\ 
+  &  & (0.001) \\ 
+  & & \\ 
+ $t$$\times$positive\_surprise$\times$seance\_fr\_first\_week &  & 0.011$^{***}$ \\ 
+  &  & (0.001) \\ 
+  & & \\ 
+\hline \\[-1.8ex] 
+Observations & 26,598 & 26,598 \\ 
+R$^{2}$ & 0.856 & 0.867 \\ 
+Adjusted R$^{2}$ & 0.844 & 0.856 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table}
+
 \subsection{Does Learning Decline Over Time?}
 \label{sub:does_learning_decline_over_time_}
 
-
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Fri, Mar 02, 2018 - 05:12:25 PM
+\begin{table}[!htbp] \centering 
+  \caption{Convexity of the sales profile} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & log\_entree\_fr \\ 
+\hline \\[-1.8ex] 
+ $t$ & $-$0.978$^{***}$ \\ 
+  & (0.011) \\ 
+  & \\ 
+ $t^2$ & 0.034$^{***}$ \\ 
+  & (0.001) \\ 
+  & \\ 
+ $t$$\times$positive\_surprise & 0.393$^{***}$ \\ 
+  & (0.016) \\ 
+  & \\ 
+ $t^2$$\times$positive\_surprise & $-$0.026$^{***}$ \\ 
+  & (0.001) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 26,598 \\ 
+R$^{2}$ & 0.861 \\ 
+Adjusted R$^{2}$ & 0.850 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table}
