@@ -3,44 +3,54 @@
 \subsection{Presentation of the model}
 
 \section{Framework}
-	Moretti develops a model that defines social learning as the effect of one consumer's opinion on a given good's consumption, on her acquaitancies's willingness to consume.\\
-	Applied to cinema, his idea is that comsumers go and see a certain film if they get a sufficient expected utiliy to compensate the cost of viewing.\\
-	\subsection{Utility Estimation Before A Movie Is Released}	
-	\subsubsection{Actual Utility}
-	The utility provided by a given film (called "quality") is estimated by the consumers before the movie is being launched. They use the the objective elements about the film, available to them all, to get a \textit{prior}. Consumers also get a personal \textit{signal} that indicates how much they are attracted by the film's concept.\\
-	\\
-	Expected utility is the weighted average of the prior and the signal. Progressively, the acquaintancies' opinion on the film is also included in this weighted average. \\
-	\\
-	An individual i gets a utility $U_{i,j}$ watching the film j with\\
-	\begin{equation} \label{eq:1}
-		U_{i,j}=\alpha_{j}^{*}+v_{i j},
-	\end{equation}
-	where $\alpha_{j}^{*}$ is the quality of the movie for the average individual and $v_{i j}\sim \mathcal{N}(0,\frac{1}{d})$ represents how much individual i's appeal for movie j differs from the the average individual's taste for this movie (that is the reason why the variable $v_{i j}$ is zero-mean). It is worth noticing that $v_{i j}$'s variance is independant of both i and j: the distribution of the tastes aroung the mean is supposed to be constant (in absolute value) no matter the film.\\
-	These two parameters are supposed to be unobserved. This is consistent for $\alpha_{j}^{*}$ as an individual may find it hard to estimate precisely the advice of the \textit{average consumer}: she does not observe all advices, thus cannot precisely determine the mean of all the tastes. So $\alpha_{j}^{*}$ can be considered as a random variable; to make the model rather simple, this variable is supposed to be normal, i.e. totally characterized by its mean and variance.\\
-	This variable's mean (referred to precedently as the prior) can be estimated from all the observable features of the film (such as the director, the budget, the casting...), that are aggregated into the variable $X_{j}$. Thus, $\mathbb{E}(\alpha_{j}^{*})=X_{j}'\beta$, like in a simple linear model. This expression embodies one of Moretti's key ideas in his paper, that a film's quality is the only determiner of the utility if we omit interpersonal differences in tastes.\\
-	$\alpha_{j}^{*}$'s variance does not depend on the individual doing the estimation (all individual are supposed to have the same information about the film and to analyse it the same way). Nevertheless, it depends on the movie. Sequels and films shot by famous directors are characterised by a much lower variance since the precedent movies'outcome (success or failure) could be observed.\\
-	Thus: $\alpha_{j}^{*}\sim \mathcal{N}(X_{j}'\beta,\frac{1}{m_{j}})$\\
-	
-	\subsubsection{Signal: Noisy Utility}
-	Moretti suposes that consumers don't measure $u_{i,j}$ but recieves instead a noisy signal $s_{i j}=U_{i j}+\epsilon_{i j}$ with $\epsilon_{i j}\sim \mathcal{N}(0,\frac{1}{k_{j}})$. Introducing an unbiased signal allows that the averages of s and U are the same for a certain movie j, which is a basic requirement in a social learning model (aggregated signal gives an unbiased estimator). Additionnaly, for a set of movies that give the same utility to a given consumer and that have the same variance for $\epsilon_{i j}$, the consumer makes on average correct predictions of her utility starting from the signal she gets. \\
-	$\epsilon_{i j}$ and $v_{i j}$ are also supposed independant of each other and of $\alpha_{j}^{*}$; the idea is that the objective quality of the film, the subjective appeal for it and the error in measuring these values aren't correlated, since they are of different nature.\\
-	It is worth noticing, in that sense, that the three variables introduced above are all considered as random, but in different senses. For  $\alpha_{j}^{*}$ it can be interpreted as a lack of sufficient information to estimate $\beta$ correctly. For $v_{i j}$ the probability distribution allows to consider a set of different individuals with different tastes. $\epsilon_{i j}$ is rather an error of interpretation (or, more mathematically, of measurement) during the determining of $U_{i j}$\\\\
-	Additionaly we suppose that $X_{j}$, $\beta$, $m_{j}$, $k_{j}$ and d are well-known by all the consumers.
-	\\
-	\subsubsection{Expected Utiliy}
-	As said above, the exprected utiliy in the first week (i.e. before the film is being released) is estimated by the weighted average of the prior and the signal, namely:
-	\begin{center}
-		$\mathbb{E}_1[U_{i j}|X_{j}'\beta, s_{i j}]=\omega_{j} X_{j}'\beta+(1-\omega_{j})s_{i j}$.
-	\end{center}
-	The idea is to use to different estimators of $U_{i j}$: its estimated average value (which is certain) and its value with some zero-mean noise (which cumulates several uncertainties).\\
-	The expression of the variance has to put more weight on the most precise term between the two estimators of $U_{i j}$; we want to know whether it is better \\
-	- to omit widely the personal part $v_{i j}$ (of variance $\frac{1}{d})$) and the error in estimating the average value $\alpha_{j}^{*}$ (of variance $\frac{1}{m_{j}})$), i.e. to put more weight on $X_{j}'\beta$,\\
-	- or to cope with noise $\epsilon_{i j}$ (of variance $\frac{1}{k_{j}}$), i.e. to put more weight on $s_{i j}$.\\
-	Like in the WLS approach, we minimize the exprected value of the square difference between the right-hand side above, and the sought term $U_{i j}$, choosing the optimal $\omega_{j}$, i.e. :
-	\begin{center}
-		$\min_{\omega_{j}} \mathbb{E}((\omega_{j} X_{j}'\beta+(1-\omega_{j})s_{i j}-U_{i j})^{2})=\min_{\omega_{j}} \mathbb{E}((-\omega_{j} (\alpha_{j}^{*}-X_{j}'\beta+v_{i j})+(1-\omega_{j})\epsilon_{i j})^{2})$.
-	\end{center}
-	By independance of the different random variable studied, and linearity of the expected value:\\
+Moretti develops a model that defines social learning as the effect of one consumer's opinion on a given good's consumption, on her acquaitancies's willingness to consume.\\
+Applied to cinema, his idea is that comsumers go and see a certain film if they get a sufficient expected utiliy to compensate the cost of viewing.\\
+
+\subsection{Utility Estimation Before A Movie Is Released}	
+\subsubsection{Actual Utility}
+The utility provided by a given film (called "quality") is estimated by the consumers before the movie is being launched. They use the the objective elements about the film, available to them all, to get a \textit{prior}. Consumers also get a personal \textit{signal} that indicates how much they are attracted by the film's concept.\\
+\\
+Expected utility is the weighted average of the prior and the signal. Progressively, the acquaintancies' opinion on the film is also included in this weighted average. \\
+\\
+An individual i gets a utility $U_{i,j}$ watching the film j with\\
+\begin{equation} \label{eq:1}
+	U_{i,j}=\alpha_{j}^{*}+v_{i j},
+\end{equation}
+where $\alpha_{j}^{*}$ is the quality of the movie for the average individual and $v_{i j}\sim \mathcal{N}(0,\frac{1}{d})$ represents how much individual i's appeal for movie j differs from the the average individual's taste for this movie (that is the reason why the variable $v_{i j}$ is zero-mean).\\
+\\
+It is worth noticing that $v_{i j}$'s variance is independant of both i and j: the distribution of the tastes aroung the mean is supposed to be constant (in absolute value) no matter the film.\\
+\\
+These two parameters are supposed to be unobserved. This is consistent for $\alpha_{j}^{*}$ as an individual may find it hard to estimate precisely the advice of the \textit{average consumer}: she does not observe all advices, thus cannot precisely determine the mean of all the tastes. So $\alpha_{j}^{*}$ can be considered as a random variable; to make the model rather simple, this variable is supposed to be normal, i.e. totally characterized by its mean and variance.\\
+\\
+This variable's mean (referred to precedently as the prior) can be estimated from all the observable features of the film (such as the director, the budget, the casting...), that are aggregated into the variable $X_{j}$. Thus, $\mathbb{E}(\alpha_{j}^{*})=X_{j}'\beta$, like in a simple linear model. This expression embodies one of Moretti's key ideas in his paper, that a film's quality is the only determiner of the utility if we omit interpersonal differences in tastes.\\
+$\alpha_{j}^{*}$'s variance does not depend on the individual doing the estimation (all individual are supposed to have the same information about the film and to analyse it the same way). Nevertheless, it depends on the movie. Sequels and films shot by famous directors are characterised by a much lower variance since the precedent movies'outcome (success or failure) could be observed.\\
+Thus: $\alpha_{j}^{*}\sim \mathcal{N}(X_{j}'\beta,\frac{1}{m_{j}})$\\
+
+\subsubsection{Signal: Noisy Utility}
+Moretti suposes that consumers don't measure $u_{i,j}$ but recieves instead a noisy signal
+\begin{equation*}
+	s_{i j}=U_{i j}+\epsilon_{i j}, \;\epsilon_{i j}\sim \mathcal{N}(0,\frac{1}{k_{j}}).
+\end{equation*}
+Introducing an unbiased signal allows that the averages of s and U are the same for a certain movie j, which is a basic requirement in a social learning model (aggregated signal gives an unbiased estimator). Additionnaly, for a set of movies that give the same utility to a given consumer and that have the same variance for $\epsilon_{i j}$, the consumer makes on average correct predictions of her utility starting from the signal she gets. \\
+$\epsilon_{i j}$ and $v_{i j}$ are also supposed independant of each other and of $\alpha_{j}^{*}$; the idea is that the objective quality of the film, the subjective appeal for it and the error in measuring these values aren't correlated, since they are of different nature.\\
+It is worth noticing, in that sense, that the three variables introduced above are all considered as random, but in different senses. For  $\alpha_{j}^{*}$ it can be interpreted as a lack of sufficient information to estimate $\beta$ correctly. For $v_{i j}$ the probability distribution allows to consider a set of different individuals with different tastes. $\epsilon_{i j}$ is rather an error of interpretation (or, more mathematically, of measurement) during the determining of $U_{i j}$\\\\
+Additionaly we suppose that $X_{j}$, $\beta$, $m_{j}$, $k_{j}$ and d are well-known by all the consumers.
+\\
+\subsubsection{Expected Utiliy}
+As said above, the exprected utiliy in the first week (i.e. before the film is being released) is estimated by the weighted average of the prior and the signal, namely:
+\begin{center}
+	$\mathbb{E}_1[U_{i j}|X_{j}'\beta, s_{i j}]=\omega_{j} X_{j}'\beta+(1-\omega_{j})s_{i j}$.
+\end{center}
+The idea is to use to different estimators of $U_{i j}$: its estimated average value (which is certain) and its value with some zero-mean noise (which cumulates several uncertainties).\\
+The expression of the variance has to put more weight on the most precise term between the two estimators of $U_{i j}$; we want to know whether it is better \\
+- to omit widely the personal part $v_{i j}$ (of variance $\frac{1}{d})$) and the error in estimating the average value $\alpha_{j}^{*}$ (of variance $\frac{1}{m_{j}})$), i.e. to put more weight on $X_{j}'\beta$,\\
+- or to cope with noise $\epsilon_{i j}$ (of variance $\frac{1}{k_{j}}$), i.e. to put more weight on $s_{i j}$.\\
+\\
+Like in the WLS approach, we minimize the exprected value of the square difference between the right-hand side above, and the sought term $U_{i j}$, choosing the optimal $\omega_{j}$, i.e. :
+\begin{center}
+	$\min_{\omega_{j}} \mathbb{E}((\omega_{j} X_{j}'\beta+(1-\omega_{j})s_{i j}-U_{i j})^{2})=\min_{\omega_{j}} \mathbb{E}((-\omega_{j} (\alpha_{j}^{*}-X_{j}'\beta+v_{i j})+(1-\omega_{j})\epsilon_{i j})^{2})$.
+\end{center}
+	By independance of the different random variable studied, and linearity of the expected value:
 	\begin{align*}
 	\mathbb{E}((\omega_{j} X_{j}'\beta+(1-\omega_{j})s_{i j}-U_{i j})^2)&=\omega_{j}^{2}\mathbb{E}((\alpha_{j}^{*}-X_{j}'\beta+v_{i j})^{2})+(1-\omega_{j})^{2}\mathbb{E}((\epsilon_{i j})^{2})\\
 	&=\omega_{j}^{2}Var(\alpha_{j}^{*}-X_{j}'\beta+v_{i j})+(1-\omega_{j})^{2}Var(\epsilon_{i j}),
